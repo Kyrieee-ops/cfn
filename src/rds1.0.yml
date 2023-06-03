@@ -1,0 +1,65 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "RDSテンプレート"
+
+Parameters: 
+  #---------------------------------------------------------------------#
+  # Common
+  #---------------------------------------------------------------------#
+  Prefix:
+    Type: String
+    Default: "stg"
+
+  DbPrefix: 
+    Type: String 
+    Default: "rds"
+
+  DBPassword:
+    NoEcho: 'true'
+    Description: Password MySQL database access
+    Type: String
+
+  DBoutboundCidrIPs:
+    Type: String
+    # Description: RdsDBoutboundCidrIPs
+    Default: 0.0.0.0/0
+
+Resources: 
+  #---------------------------------------------------------------------#
+  # DBSubnetGroup
+  #---------------------------------------------------------------------#
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: !Sub "${Prefix}-subnet-group"
+      SubnetIds:
+        - !ImportValue PrivateSubnet1Id
+        - !ImportValue PrivateSubnet2Id
+      Tags:
+        - Key: Name
+          Value: !Sub "${Prefix}-subnet-group"
+
+  #---------------------------------------------------------------------#
+  # DBSecurityGroup
+  #---------------------------------------------------------------------#
+  # EC2のセキュリティグループからのインバウンド許可
+  RdsSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub "${DbPrefix}-sg"
+      GroupDescription: !Sub "${DbPrefix}-sg"
+      VpcId: !ImportValue StgVPC-From-Ec2-Vpcendpoint
+      #EC2のセキュリティグループからのアクセスを許可
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          # CidrIp: !ImportValue StgEC2SecurityGroup
+          SourceSecurityGroupId: !ImportValue StgEC2SecurityGroup
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          FromPort: -1
+          ToPort: -1
+          CidrIp: !Ref DBoutboundCidrIPs
+      Tags:
+        - Key: Name
+          Value: !Sub "${DbPrefix}-sg"

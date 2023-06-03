@@ -61,7 +61,7 @@ Resources:
       EnableDnsSupport: true
       EnableDnsHostnames: true
       Tags:
-        - Key: "Name"
+        - Key: Name
           Value: !Sub "${Prefix}-vpc"
 
   StgPrivateSubnet1:
@@ -71,7 +71,7 @@ Resources:
       VpcId: !Ref StgVPC
       CidrBlock: !Ref PrivateSubnet1Cidr
       Tags:
-        - Key: "Name"
+        - Key: Name
           Value: !Sub "${Prefix}-private-subnet1"
   
   StgPrivateSubnet2:
@@ -81,7 +81,7 @@ Resources:
       VpcId: !Ref StgVPC
       CidrBlock: !Ref PrivateSubnet2Cidr
       Tags:
-        - Key: "Name"
+        - Key: Name
           Value: !Sub "${Prefix}-private-subnet2"
 
   StgPrivateRouteTable:
@@ -89,7 +89,7 @@ Resources:
     Properties:
       VpcId: !Ref StgVPC
       Tags:
-        - Key: "Name"
+        - Key: Name
           Value: !Sub "${Prefix}-rtb-private"
 
   # ルートテーブルをサブネットに関連付け
@@ -118,7 +118,7 @@ Resources:
           FromPort: -1
           ToPort: -1
       Tags:
-        - Key: "Name"
+        - Key: Name
           Value: !Sub "${ec2Prefix}-sg"
 
   #---------------------------------------------------------------------#
@@ -141,7 +141,7 @@ Resources:
           IpProtocol: -1
           ToPort: -1
       Tags:
-        - Key: "Name"
+        - Key: Name
           Value: !Sub "${Prefix}-ssm-vpc-endpoint-sg"
 
   SsmVpcEndpoint: 
@@ -213,7 +213,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       Tags: 
-      - Key: "Name"
+      - Key: Name
         Value: !Sub "${ec2Prefix}"
       DisableApiTermination: false
       EbsOptimized: false
@@ -240,17 +240,28 @@ Outputs:
   VPC:
     Value: !Ref StgVPC
     Export:
-      Name: StgVPC
+      Name: StgVPC-From-Ec2-Vpcendpoint
+      # Name: !Sub ${AWS::StackName}VPCFromEc2_Vpcendpoint
 
-  PrivateSubnet1: 
+  VpcId:
+    Value: !Ref VpcCidr
+    Export:
+      Name: VpcCidr
+  
+  PrivateSubnet1Cidr:
+    Value: !Ref PrivateSubnet1Cidr
+    Export:
+      Name: PrivateSubnet1Cidr
+
+  PrivateSubnet1Id:
     Value: !Ref StgPrivateSubnet1
     Export:
-      Name: StgPrivateSubnet1
-  
-  PrivateSubnet2: 
+      Name: PrivateSubnet1Id
+
+  PrivateSubnet2Id:
     Value: !Ref StgPrivateSubnet2
     Export:
-      Name: StgPrivateSubnet2
+      Name: PrivateSubnet2Id
 
   EC2SecurityGroup: 
     Value: !Ref EC2SecurityGroup
