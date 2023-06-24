@@ -266,4 +266,4 @@ Outputs:
   EC2SecurityGroup: 
     Value: !Ref EC2SecurityGroup
     Export: 
-      Name: StgEC2SecurityGroup
+      Name: Stg-From-EC2SecurityGroup

@@ -12,16 +12,30 @@ Parameters:
   DbPrefix: 
     Type: String 
     Default: "rds"
+  #---------------------------------------------------------------------#
+  # DataBase
+  #---------------------------------------------------------------------#
 
   DBPassword:
+    Type: String
     NoEcho: 'true'
     Description: Password MySQL database access
-    Type: String
 
+  #DBNameに"-"は使用できない
+  DBInstanceID:
+    Type: String
+    Default: stgdb
+    Description: My database instance
+  DBAllocatedStorage:
+    Default: '5'
+    Description: The size of the database (Gb)
+    Type: Number
+  
   DBoutboundCidrIPs:
     Type: String
-    # Description: RdsDBoutboundCidrIPs
+    Description: RdsDBoutboundCidrIPs
     Default: 0.0.0.0/0
+
 
 Resources: 
   #---------------------------------------------------------------------#
@@ -31,6 +45,7 @@ Resources:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
       DBSubnetGroupDescription: !Sub "${Prefix}-subnet-group"
+      DBSubnetGroupName: !Sub "${Prefix}-subnet-group"
       SubnetIds:
         - !ImportValue PrivateSubnet1Id
         - !ImportValue PrivateSubnet2Id
@@ -54,7 +69,7 @@ Resources:
           FromPort: 3306
           ToPort: 3306
           # CidrIp: !ImportValue StgEC2SecurityGroup
-          SourceSecurityGroupId: !ImportValue StgEC2SecurityGroup
+          SourceSecurityGroupId: !ImportValue Stg-From-EC2SecurityGroup
       SecurityGroupEgress:
         - IpProtocol: -1
           FromPort: -1
@@ -63,3 +78,28 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "${DbPrefix}-sg"
+
+  #---------------------------------------------------------------------#
+  # RDS
+  #---------------------------------------------------------------------#
+  # SecurityGroupはRdsSecurityGroupを使用する
+  RdsDBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      Engine: MySQL
+      EngineVersion: "8.0.32"
+      DBInstanceClass: db.t2.micro
+      AllocatedStorage: !Ref DBAllocatedStorage
+      StorageType: gp2
+      MasterUsername: admin
+      MasterUserPassword: 
+        !Ref DBPassword
+      DBName: !Sub ${DBInstanceID}
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      MultiAZ: "false"
+      AvailabilityZone: !Sub ${AWS::Region}a
+      Tags:
+        - Key: Name
+          Value: !Sub ${Prefix}-${AWS::Region}-db
+      VPCSecurityGroups:
+       - !Ref RdsSecurityGroup
