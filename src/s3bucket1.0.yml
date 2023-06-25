@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "S3 Template"
+
+Parameters:
+  #---------------------------------------------------------------------#
+  # Common
+  #---------------------------------------------------------------------#
+  Prefix:
+    Type: String
+    Default: "stg"
+
+  S3BucketName: 
+    Type: String
+    Default: s3-log-674078804300
+
+Resources: 
+  #---------------------------------------------------------------------#
+  # S3 Bucket
+  #---------------------------------------------------------------------#
+  s3Bucket:
+    Type: AWS::S3::Bucket
+    Properties: 
+      AccessControl: Private
+      BucketName: !Sub ${Prefix}-${S3BucketName}
+      PublicAccessBlockConfiguration:
+           BlockPublicAcls: true
+           BlockPublicPolicy: true
+           IgnorePublicAcls: true
+           RestrictPublicBuckets: true
+      VersioningConfiguration: 
+        Status: Suspended
+      BucketEncryption: 
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault: 
+             SSEAlgorithm: AES256
+            BucketKeyEnabled: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${Prefix}-${S3BucketName}  
+
+  #---------------------------------------------------------------------#
+  # S3 VPCエンドポイント
+  #---------------------------------------------------------------------#
+  S3Endpoint: 
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+        PrivateDnsEnabled: true
+        VpcEndpointType: Gateway
+        ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
+        SubnetIds:
+             - !ImportValue PrivateSubnet1Id
+        VpcId: !ImportValue StgVPC-From-Ec2-Vpcendpoint
+

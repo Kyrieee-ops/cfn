@@ -30,3 +30,39 @@ aws cloudformation deploy \
 ```
 外部ファイル参照ためrds.cfgファイルを
 --parameter-overridesで指定しています。
+
+3. deploy完了後クライアント端末からSession Managerのポートフォワードを開始してリモートホストに接続する
+
+WindowsOSの場合:
+
+以下コマンドをPowerShellで実行します。
+```PowerShell
+aws ssm start-session `
+  --target EC2インスタンスのインスタンスID `
+  --document-name AWS-StartPortForwardingSessionToRemoteHost `
+  --parameters '{\"portNumber\":[\"3306\"], \"localPortNumber\":[\"3306\"], \"host\":[\"RDSのエンドポイント\"]}'
+```
+
+MacOSの場合:
+
+以下コマンドをターミナルで実行します。
+```Terminal
+aws ssm start-session \
+  --target EC2インスタンスのインスタンスID \
+  --document-name AWS-StartPortForwardingSessionToRemoteHost \
+  --parameters '{"portNumber":["3306"], "localPortNumber":["3306"], "host":["RDSのエンドポイント"]}'
+```
+
+以下のようなメッセージが表示されればポートフォワードを開始し、ローカルホストのポート3306をAmazon RDSのポート3306へ転送している状態で接続待ちになっています。
+
+```
+Starting session with SessionId: Administrator-03c193d64c5411884
+Port 3306 opened for sessionId Administrator-03c193d64c5411884.
+Waiting for connections...
+```
+
+4. DBeaverからの接続方法
+
+
+5. MySQL Workbenchからの接続方法
+
