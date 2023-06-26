@@ -5,7 +5,7 @@
 >
 > - StackNameは適宜任意の名称に置き換えてください。
 > - rds.cfgファイルにのDBPasswordは適宜任意のパスワードに変更してください
-> - 参考資料: 
+> - 参考資料各種: 
 >   - https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
 >
 >
@@ -32,7 +32,16 @@ aws cloudformation deploy \
 外部ファイル参照ためrds.cfgファイルを
 --parameter-overridesで指定しています。
 
-3. deploy完了後クライアント端末からSession Managerのポートフォワードを開始してリモートホストに接続する
+3. s3bucket1.0.ymlをdeployする
+aws cli command
+```aws cli
+aws cloudformation deploy \
+--stack-name StackName \
+--template-file s3bucket1.0.yml
+```
+
+
+4. deploy完了後クライアント端末からSession Managerのポートフォワードを開始してリモートホストに接続する
 
 WindowsOSの場合:
 
