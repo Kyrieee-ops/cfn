@@ -263,6 +263,11 @@ Outputs:
     Export:
       Name: PrivateSubnet2Id
 
+  PrivateRouteTable:
+    Value: !Ref StgPrivateRouteTable
+    Export: 
+      Name: PrivateRouteTable
+
   EC2SecurityGroup: 
     Value: !Ref EC2SecurityGroup
     Export: 

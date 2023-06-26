@@ -11,7 +11,7 @@ Parameters:
 
   S3BucketName: 
     Type: String
-    Default: s3-log-674078804300
+    Default: "s3-log-674078804300"
 
 Resources: 
   #---------------------------------------------------------------------#
@@ -40,14 +40,15 @@ Resources:
 
   #---------------------------------------------------------------------#
   # S3 VPCエンドポイント
+  # PrivateDnsEnabledの記述不要
+  # Gateway型の場合SubnetIdsの記述不要 -> エラーになる
   #---------------------------------------------------------------------#
   S3Endpoint: 
     Type: AWS::EC2::VPCEndpoint
     Properties:
-        PrivateDnsEnabled: true
         VpcEndpointType: Gateway
         ServiceName: !Sub com.amazonaws.${AWS::Region}.s3
-        SubnetIds:
-             - !ImportValue PrivateSubnet1Id
+        RouteTableIds:
+             - !ImportValue PrivateRouteTable
         VpcId: !ImportValue StgVPC-From-Ec2-Vpcendpoint
 
