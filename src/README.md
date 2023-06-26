@@ -5,7 +5,7 @@
 >
 > - StackNameは適宜任意の名称に置き換えてください。
 > - rds.cfgファイルにのDBPasswordは適宜任意のパスワードに変更してください
-> - 参考資料: 
+> - 参考資料各種: 
 >   - https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html
 >
 >
