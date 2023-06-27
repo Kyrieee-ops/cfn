@@ -71,8 +71,16 @@ Port 3306 opened for sessionId Administrator-03c193d64c5411884.
 Waiting for connections...
 ```
 
-4. DBeaverからの接続方法
-
-
 5. MySQL Workbenchからの接続方法
+  - MSQ LWorkbenchを起動し、プラスマークをクリックする
+![MySqlWorkbench_connection1](../img/MySqlWorkbench_connection1.png)
+  - Connection Name
+  - Hostname
+  - Port (デフォルトのまま)
+  - Username
+  - Password
 
+  上記を入力する
+![MySqlWorkbench_connection2](../img/MySqlWorkbench_connection2.png)
+
+![MySqlWorkbench_connection3](../img/MySqlWorkbench_connection3.png)
