@@ -32,6 +32,12 @@ Parameters:
   
   #---------------------------------------------------------------------#
   # EC2
+  # Amazon linux2の最新のAMI IDをaws cliコマンドで取得できるため、CloudFormationのParameterの指定では以下を指定する
+  # /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+  # aws cliコマンドで実際に確認したい場合は以下コマンドを実行する
+  # aws ssm get-parameter --name /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+  # Amazon Linux2023の最新AMI IDを取得したい場合は以下
+  # aws ssm get-parameter --name /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
   #---------------------------------------------------------------------#
   EC2InstanceName:
     Type: String
