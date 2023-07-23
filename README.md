@@ -73,7 +73,7 @@ Waiting for connections...
 
 5. MySQL Workbenchからの接続方法
   - MSQ LWorkbenchを起動し、プラスマークをクリックする
-![MySqlWorkbench_connection1](../img/MySqlWorkbench_connection1.png)
+![MySqlWorkbench_connection1](./img/MySqlWorkbench_connection1.png)
   - Connection Name
   - Hostname
   - Port (デフォルトのまま)
@@ -81,6 +81,6 @@ Waiting for connections...
   - Password
 
   上記を入力する
-![MySqlWorkbench_connection2](../img/MySqlWorkbench_connection2.png)
+![MySqlWorkbench_connection2](./img/MySqlWorkbench_connection2.png)
 
-![MySqlWorkbench_connection3](../img/MySqlWorkbench_connection3.png)
+![MySqlWorkbench_connection3](./img/MySqlWorkbench_connection3.png)
